@@ -14,11 +14,7 @@ Para comenzar, asegúrate de tener GIT, Visual Studio Code y Python instalados e
    - Navega a la carpeta deseada para almacenar tu proyecto localmente.
    - Haz clic derecho, selecciona "Git Bash here" y ejecuta el siguiente comando:
      ```
-     git clone https://github.com/EstebanCamiloEY/iac_b2b_mayordomo_email_py.git
-     ```
-   - En caso de problemas con certificados, desactiva la validación ejecutando el siguiente comando:
-     ```
-     git config --global http.sslVerify false
+     git clone https://github.com/TejeroAgustn/TraficoAereo.git
      ```
 
 1.2 Configuración de Visual Studio Code:
@@ -33,7 +29,7 @@ Para comenzar, asegúrate de tener GIT, Visual Studio Code y Python instalados e
      ```
      python -m venv ./venv
      ```
-     O prueba con:
+     Si no funciona prueba con:
      ```
      py -m venv ./venv
      ```
@@ -41,9 +37,10 @@ Para comenzar, asegúrate de tener GIT, Visual Studio Code y Python instalados e
      ```
      .\venv\scripts\Activate.ps1
      ```
-   - Instala las librerías y dependencias del proyecto con:
+     Si te da errores dáselos a chatGPT para que te diga la mierda que tienes que poner en GitBash para que no te de error.
+   - Instala las librerías y dependencias del proyecto con: (cosa que no hace falta porque aún no usamos librerías externas)
      ```
      pip install -r requirements.txt
      ```
 
-Con estas configuraciones, debería estar todo listo para ejecutar el proyecto correctamente.
+Con estas configuraciones, debería estar todo listo para ejecutar el proyecto correctamente. Si te da algún error ya sabes, a chatGPT.
