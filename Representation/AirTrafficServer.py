@@ -38,8 +38,8 @@ class AirTrafficServer:
         server = ModularServer(self.model_cls,
                        [grid, chart],
                        "Air Traffic Model",
-                       {"num_airports": 5,  # Aquí debes especificar el número deseado de aeropuertos
-                        "num_planes": 20,   # Aquí debes especificar el número deseado de aviones
+                       {"num_airports": 2,
+                        "num_planes": 1,
                         "width": self.width,
                         "height": self.height})
 
