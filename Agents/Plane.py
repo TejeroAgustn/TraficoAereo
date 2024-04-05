@@ -12,15 +12,21 @@ class Plane(Agent):
         self.vueling = False
         self.waiting = False
 
-    def request_airstrip(self):
-        self.origin.request_airstrip(self)
-
     def travel(self):
         if abs(self.destination.location[0] - self.location[0]) > abs(self.destination.location[1] - self.location[1]):
             self.location[0] = self.location[0] + 1 if self.destination.location[0] > self.location[0] else self.location[0] - 1
         else:
             self.location[1] = self.location[1] + 1 if self.destination.location[1] > self.location[1] else self.location[1] - 1
     
+    def accept_request(self):
+        self.waiting = False
+
+        if self.location == self.destination:
+            self.wait_time_airport = self.wait_time_landing 
+            self.vueling = False
+        else:
+            self.wait_time_airport = self.wait_time_takeoff
+            self.vueling = True
 
     def step(self):
 
@@ -32,22 +38,33 @@ class Plane(Agent):
             elif self.vueling and self.waiting:
                 # Hemos pedido pero no nos lo han dado aún
                 pass
-            elif self.wait_time_airport > 0 and not self.vueling and not self.waiting:
+            elif self.wait_time_airport > 0:
                 # Nos han dado el permiso
                 self.wait_time_airport -= 1
-            else # self.wait_time_airport = 0 and not self.vueling and not self.waiting:
+            else: # self.wait_time_airport = 0 and not self.vueling and not self.waiting:
                 # Esto quiere decir que hemos aterrizado, hacemos cambios para volver a despegar
-                
-            
+                self.destination, self.origin = self.origin, self.destination
+                self.origin.request_airstrip(self)
+                self.waiting = True
+
+
+
         elif self.location == self.origin:
-            if self.wait_time_airport > 0 and not self.vueling and not self.waiting:
+            # He quitado esto porque cuando aterrizamos e intercambiamos las variable va a ser cuando pidamos ya para despegar y nos quedemos esperando
+            #if self.wait_time_airport > 0 and not self.vueling and not self.waiting:
                 # Acabamos de aterrizar
-            elif not self.vueling and not self.waiting:
+            #    pass
+            #if not self.vueling and not self.waiting:
                 # Vamos a pedir despegue
-            elif not self.vueling and self.waiting:
+            #    pass
+            if not self.vueling and self.waiting:
                 # Hemos pedido pero no nos lo han dado
                 pass
-            else:
+            elif self.wait_time_airport > 0:
+                # Nos han dado el permiso
+                self.wait_time_airport -= 1
+            else: # self.wait_time_airport = 0 and self.vueling and not self.waiting:
                 # Hemos despegao y hay que moverse
+                self.travel()
         else:
-            # Nos movemos
+            self.travel()
