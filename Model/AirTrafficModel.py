@@ -41,9 +41,9 @@ class AirTrafficModel(Model):
             plane = Plane(i, self, destination, origin, random.randint(0, 10), random.randint(1, 5), random.randint(1, 5), random.randint(1, max_plane_speed))
             self.grid.place_agent(plane, origin.pos)
             self.schedule.add(plane)
-    
+
     def step(self):
         if(self._steps < self.tiempo_simulacion):
             self.schedule.step()
         elif (self._steps == self.tiempo_simulacion):
-            print("mis muertos")
+            print(self._steps)

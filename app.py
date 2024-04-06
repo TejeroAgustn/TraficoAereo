@@ -8,5 +8,5 @@ if __name__ == "__main__":
     # Caso 2 Cada aeropuerto tendrá un número diferente de pistas, generado aleatoriamente al comienzo de la simulación. 
     # Este valor deberá estar comprendido entre el máximo y mínimo valor establecidos
     server = AirTrafficServer(AirTrafficModel, tam_cuadricula=70, tiempo_simulacion=200, num_airports=10, 
-                              num_planes=1000, max_num_aisrstrips=5, max_plane_speed=5)
+                              num_planes=1000, max_num_aisrstrips=5, max_plane_speed=5, tiempo_entre_despegues_aterrizajes=5, max_time_waiting=5)
     server.launch()

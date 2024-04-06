@@ -37,5 +37,3 @@ class Airport(Agent):
                     self.airstrips[i] = self.cooldown_airstrip + plane.accept_request()
                     self.queue.remove(plane)
                     break
-
-                

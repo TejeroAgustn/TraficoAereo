@@ -20,7 +20,6 @@ class AirTrafficServer:
         self.tiempo_entre_despegues_aterrizajes = tiempo_entre_despegues_aterrizajes
         self.max_time_waiting = max_time_waiting
 
-
     def agent_portrayal(self, agent):
         if isinstance(agent, Airport):
             return {
@@ -47,9 +46,9 @@ class AirTrafficServer:
                             data_collector_name='datacollector')
 
         server = ModularServer(self.model_cls,
-                       [grid, chart],
-                       "Air Traffic Model",
-                       {"width": self.width,
+                    [grid, chart],
+                    "Air Traffic Model",
+                    {"width": self.width,
                         "height": self.height,
                         "num_airports": self.num_airports,
                         "num_planes": self.num_planes,
