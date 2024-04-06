@@ -7,11 +7,12 @@ from Agents.Plane import Plane
 from mesa.datacollection import DataCollector
 
 class AirTrafficModel(Model):
-    def __init__(self, num_airports, num_planes, width, height):
+    def __init__(self, width, height, num_airports, num_planes, max_num_aisrstrips, max_plane_speed):
         super().__init__()
         self.num_airports = num_airports
         self.num_planes = num_planes
         self.grid = MultiGrid(width, height, False)
+
         self.schedule = RandomActivation(self)
         self._steps = 0  # Inicializamos el contador de pasos
         # Define el DataCollector para recopilar datos de interés
@@ -22,21 +23,18 @@ class AirTrafficModel(Model):
         )
         # Crear aeropuertos
         for i in range(num_airports):
-            airport = Airport(i, self)
-            self.grid.place_agent(airport, airport.location)
+            airport = Airport(i, self, random.randint(1, max_num_aisrstrips), random.randint(1, 5))
+            self.grid.place_agent(airport, airport.pos)
             self.schedule.add(airport)
 
         # Crear aviones
         for i in range(num_planes):
-            origin = random.choice(self.schedule.agents)
-            destination = random.choice(self.schedule.agents)
-            while origin == destination:
-                destination = random.choice(self.schedule.agents)
-            plane = Plane(i, self, origin, destination)
-            self.grid.place_agent(plane, origin.location)
+            origin = random.choice([agent for agent in self.schedule.agents if isinstance(agent, Airport)])
+            destination = random.choice([agent for agent in self.schedule.agents if isinstance(agent, Airport) and agent != origin])
+
+            plane = Plane(i, self, destination, origin, random.randint(0, 10), random.randint(1, 5), random.randint(1, 5), random.randint(1, max_plane_speed))
+            self.grid.place_agent(plane, origin.pos)
             self.schedule.add(plane)
     
     def step(self):
-        print("Paso de simulación:", self._steps)
-        print(self.grid)
         self.schedule.step()
