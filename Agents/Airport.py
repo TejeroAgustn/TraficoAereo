@@ -8,6 +8,10 @@ class Airport(Agent):
         self.cooldown_airstrip = cooldown_airstrip
         self.airstrips = self.init_airstrip_cooldown(num_airstrips)
         self.queue = []
+        self.total_landings = 0
+        self.total_takeoffs = 0
+        self.total_landing_waiting_time = 0
+        self.total_landing_waiting_time = 0
 
     def init_airstrip_cooldown(self, num_airstrips):
         # al principio no hay cooldown entre los aviones ya que no puede haber mas aviones que pista con todos los aviones para despegar (esto tendriamos que forzarlo en el init)
@@ -21,7 +25,14 @@ class Airport(Agent):
         return random.randrange(self.model.grid.width), random.randrange(self.model.grid.height)
 
     def request_airstrip(self, plane):
-        self.queue.append(plane)
+        self.queue.append([plane,0])
+
+    def confirm_takeoff(self, airstrip):
+
+        pass
+
+    def confirm_landing(self, airstrip):
+        pass
 
     def step(self):
         #print('Aeropuerto: ' + str(self.unique_id))
@@ -29,11 +40,15 @@ class Airport(Agent):
             if self.airstrips[i] > 0:
                 self.airstrips[i] -= 1
 
-        for plane in self.queue:
+        for plane,waiting in self.queue:
+            
             for i in range(len(self.airstrips)):
                 # si no hay cooldown
                 if self.airstrips[i] == 0:
                     #reiniciamos cooldown y pasamos al siguiente avion
-                    self.airstrips[i] = self.cooldown_airstrip + plane.accept_request()
+                    self.airstrips[i] = self.cooldown_airstrip + plane.accept_request(i)
                     self.queue.remove(plane)
                     break
+
+            if [plane,waiting] in self.queue:
+                self.queue[self.queue.index([plane,waiting])][1] += 1 #this is cancer and should not be allowed please report us
