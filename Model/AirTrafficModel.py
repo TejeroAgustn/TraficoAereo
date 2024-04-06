@@ -7,11 +7,17 @@ from Agents.Plane import Plane
 from mesa.datacollection import DataCollector
 
 class AirTrafficModel(Model):
-    def __init__(self, width, height, num_airports, num_planes, max_num_aisrstrips, max_plane_speed):
+    def __init__(self, width, height, num_airports, num_planes, max_num_aisrstrips, max_plane_speed, 
+                 tiempo_simulacion, tiempo_entre_despegues_aterrizajes, max_time_waiting):
+        
         super().__init__()
         self.num_airports = num_airports
         self.num_planes = num_planes
         self.grid = MultiGrid(width, height, False)
+
+        self.tiempo_simulacion = tiempo_simulacion
+        self.tiempo_entre_despegues_aterrizajes = tiempo_entre_despegues_aterrizajes
+        self.max_time_waiting = max_time_waiting
 
         self.schedule = RandomActivation(self)
         self._steps = 0  # Inicializamos el contador de pasos
@@ -37,4 +43,7 @@ class AirTrafficModel(Model):
             self.schedule.add(plane)
     
     def step(self):
-        self.schedule.step()
+        if(self._steps < self.tiempo_simulacion):
+            self.schedule.step()
+        elif (self._steps == self.tiempo_simulacion):
+            print("mis muertos")

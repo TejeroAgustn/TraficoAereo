@@ -5,7 +5,9 @@ from Agents.Airport import Airport
 from Agents.Plane import Plane
 
 class AirTrafficServer:
-    def __init__(self, model_cls, tam_cuadricula, num_airports, num_planes, max_num_aisrstrips, max_plane_speed):
+    def __init__(self, model_cls, tam_cuadricula, tiempo_simulacion, num_airports, num_planes, max_num_aisrstrips, 
+                 tiempo_entre_despegues_aterrizajes, max_plane_speed, max_time_waiting):
+        
         self.model_cls = model_cls
         self.width = tam_cuadricula
         self.height = tam_cuadricula
@@ -13,6 +15,11 @@ class AirTrafficServer:
         self.num_planes = num_planes
         self.max_num_aisrstrips = max_num_aisrstrips
         self.max_plane_speed = max_plane_speed
+
+        self.tiempo_simulacion = tiempo_simulacion
+        self.tiempo_entre_despegues_aterrizajes = tiempo_entre_despegues_aterrizajes
+        self.max_time_waiting = max_time_waiting
+
 
     def agent_portrayal(self, agent):
         if isinstance(agent, Airport):
@@ -47,8 +54,11 @@ class AirTrafficServer:
                         "num_airports": self.num_airports,
                         "num_planes": self.num_planes,
                         "max_num_aisrstrips": self.max_num_aisrstrips,
-                        "max_plane_speed":self.max_plane_speed
+                        "max_plane_speed":self.max_plane_speed,
+                        "tiempo_simulacion": self.tiempo_simulacion, 
+                        "tiempo_entre_despegues_aterrizajes": self.tiempo_entre_despegues_aterrizajes, 
+                        "max_time_waiting":self.max_time_waiting
                         })
 
-        server.port = 8521  # The default
+        server.port = 6969
         server.launch()
