@@ -34,7 +34,7 @@ class AirTrafficModel(Model):
         
         # Crear aeropuertos
         for i in range(num_airports):
-            airport = Airport(i, self, random.randint(1, max_num_aisrstrips), random.randint(1, 5))
+            airport = Airport(i, self, random.randint(1, max_num_aisrstrips), tiempo_entre_despegues_aterrizajes)
             self.grid.place_agent(airport, airport.pos)
             self.schedule.add(airport)
 
@@ -43,7 +43,7 @@ class AirTrafficModel(Model):
             origin = random.choice([agent for agent in self.schedule.agents if isinstance(agent, Airport)])
             destination = random.choice([agent for agent in self.schedule.agents if isinstance(agent, Airport) and agent != origin])
 
-            plane = Plane(i, self, destination, origin, random.randint(0, 10), random.randint(1, 5), random.randint(1, 5), random.randint(1, max_plane_speed))
+            plane = Plane(i, self, destination, origin, random.randint(0, 10), random.randint(1, max_time_waiting), random.randint(1, max_time_waiting), random.randint(1, max_plane_speed))
             self.grid.place_agent(plane, origin.pos)
             self.schedule.add(plane)
     
@@ -51,60 +51,112 @@ class AirTrafficModel(Model):
         if(self._steps < self.tiempo_simulacion):
             self.schedule.step()
         elif (self._steps == self.tiempo_simulacion):
-            
-            max_airstrips = 0
-            min_airstrips = sys.maxsize
-            mean_airstrips = 0
-
-            max_airport_takeoffs = 0
-            min_airport_takeoffs = sys.maxsize
-            mean_airport_takeoffs = 0
-            
-            
-            max_airport_landings = 0
-            min_airport_landings = sys.maxsize
-            mean_airport_landings = 0
-
-            for airport in self.schedule.agents:
-                if isinstance(airport, Airport):
-                    if len(airport.airstrips) > max_airstrips:
-                        max_airstrips = len(airport.airstrips)
-                    if len(airport.airstrips) < min_airstrips:
-                        min_airstrips = len(airport.airstrips)
-                    mean_airstrips += len(airport.airstrips)
-
-                    if airport.total_takeoffs > max_airport_takeoffs:
-                        max_airport_takeoffs = airport.total_takeoffs
-                    if airport.total_takeoffs < min_airport_takeoffs:
-                        min_airport_takeoffs = airport.total_takeoffs
-                    mean_airport_takeoffs += airport.total_takeoffs
-
-                    if airport.total_landings > max_airport_landings:
-                        max_airport_landings = airport.total_landings
-                    if airport.total_landings < min_airport_landings:
-                        min_airport_landings = airport.total_landings
-                    mean_airport_landings += airport.total_landings
-
-            mean_airstrips = mean_airstrips / self.num_airports
-            mean_airport_takeoffs = mean_airport_takeoffs / self.num_airports
-            mean_airport_landings = mean_airport_landings / self.num_airports
-
-
-            variables = f"""
-                  Tiempo total en minutos: {self._steps}
-                  Número de vuelos totales: #suma de cuanto ha volado cada avion
-                  Número de aeropuertos: {self.num_airports}
-                  Número de aviones: {self.num_planes}
-                  Dimensiones de la cuadrícula: {self.width} x {self.height}
-                  Máximo, mínimo y valor medio de pistas de aeropuertos: {max_airstrips} , {min_airstrips} , {mean_airstrips}
-                  Máximo, mínimo y valor medio de despegues por aeropuerto: {max_airport_takeoffs} , {min_airport_takeoffs} , {min_airport_takeoffs}
-                  Máximo, mínimo y valor medio de despegues por avion: 
-                  Máximo, mínimo y valor medio de aterrizajes por aeropuerto: {max_airport_landings} , {min_airport_landings} , {min_airport_landings}
-                  Máximo, mínimo y valor medio de aterrizajes por avion:
-                  Máximo, mínimo y valor medio de retrasos en despegues por aeropuerto:
-                  Máximo, mínimo y valor medio de retrasos en despegues por avion:
-                  Máximo, mínimo y valor medio de retrasos en aterrizajes por aeropuerto: 
-                  Máximo, mínimo y valor medio de retrasos en aterrizajes por avion: 
-                """
-            print(variables)
+            print(self.parametros_salida())
             sys.exit()
+
+    def parametros_salida(self):
+        max_airstrips = 0
+        min_airstrips = sys.maxsize
+        mean_airstrips = 0
+
+        max_airport_takeoffs = 0
+        min_airport_takeoffs = sys.maxsize
+        mean_airport_takeoffs = 0
+        
+        max_airport_landings = 0
+        min_airport_landings = sys.maxsize
+        mean_airport_landings = 0
+
+        max_plane_takeoffs = 0
+        min_plane_takeoffs = sys.maxsize
+        mean_plane_takeoffs = 0
+        
+        max_plane_landings = 0
+        min_plane_landings = sys.maxsize
+        mean_plane_landings = 0
+
+        max_waiting_takeoffs = 0
+        min_waiting_takeoffs = sys.maxsize
+        mean_waiting_takeoffs = 0
+
+        max_waiting_landings = 0
+        min_waiting_landings = sys.maxsize
+        mean_waiting_landings = 0
+
+        for agent in self.schedule.agents:
+            if isinstance(agent, Airport):
+                if len(agent.airstrips) > max_airstrips:
+                    max_airstrips = len(agent.airstrips)
+                if len(agent.airstrips) < min_airstrips:
+                    min_airstrips = len(agent.airstrips)
+                mean_airstrips += len(agent.airstrips)
+
+                if agent.total_takeoffs > max_airport_takeoffs:
+                    max_airport_takeoffs = agent.total_takeoffs
+                if agent.total_takeoffs < min_airport_takeoffs:
+                    min_airport_takeoffs = agent.total_takeoffs
+                mean_airport_takeoffs += agent.total_takeoffs
+
+                if agent.total_landings > max_airport_landings:
+                    max_airport_landings = agent.total_landings
+                if agent.total_landings < min_airport_landings:
+                    min_airport_landings = agent.total_landings
+                mean_airport_landings += agent.total_landings
+
+            if isinstance(agent, Plane):
+                if agent.total_takeoffs > max_plane_takeoffs:
+                    max_plane_takeoffs = agent.total_takeoffs
+                if agent.total_takeoffs < min_plane_takeoffs:
+                    min_plane_takeoffs = agent.total_takeoffs
+                mean_plane_takeoffs += agent.total_takeoffs
+
+                if agent.total_landings > max_plane_landings:
+                    max_plane_landings = agent.total_landings
+                if agent.total_landings < min_plane_landings:
+                    min_plane_landings = agent.total_landings
+                mean_plane_landings += agent.total_landings
+
+                if agent.waitings_takeofss:
+                    if max(agent.waitings_takeofss) > max_waiting_takeoffs:
+                        max_waiting_takeoffs = max(agent.waitings_takeofss)
+                    if min(agent.waitings_takeofss) < min_waiting_takeoffs:
+                        min_waiting_takeoffs = min(agent.waitings_takeofss)
+                    mean_waiting_takeoffs += sum(agent.waitings_takeofss)
+
+                if agent.waitings_landings:
+                    if max(agent.waitings_landings) > max_waiting_landings:
+                        max_waiting_landings = max(agent.waitings_landings)
+                    if min(agent.waitings_landings) < min_waiting_landings:
+                        min_waiting_landings = min(agent.waitings_landings)
+                    mean_waiting_landings += sum(agent.waitings_landings)
+
+        numero_total_vuelos = mean_plane_takeoffs
+
+        if mean_plane_takeoffs != 0:
+            mean_waiting_takeoffs = mean_waiting_takeoffs / mean_plane_takeoffs
+
+        if mean_plane_landings != 0:
+            mean_waiting_landings = mean_waiting_landings / mean_plane_landings
+
+        mean_airstrips = mean_airstrips / self.num_airports
+        mean_airport_takeoffs = mean_airport_takeoffs / self.num_airports
+        mean_airport_landings = mean_airport_landings / self.num_airports
+        
+        mean_plane_takeoffs = mean_plane_takeoffs / self.num_planes
+        mean_plane_landings = mean_plane_landings / self.num_planes
+
+        variables = f"""
+        Tiempo total en minutos: {self._steps}
+        Número de vuelos totales: {numero_total_vuelos}
+        Número de aeropuertos: {self.num_airports}
+        Número de aviones: {self.num_planes}
+        Dimensiones de la cuadrícula: {self.width} x {self.height}
+        Máximo, mínimo y valor medio de pistas de aeropuertos: {max_airstrips} , {min_airstrips} , {mean_airstrips}
+        Máximo, mínimo y valor medio de despegues por aeropuerto: {max_airport_takeoffs} , {min_airport_takeoffs if min_airport_takeoffs<sys.maxsize else 0} , {mean_airport_takeoffs}
+        Máximo, mínimo y valor medio de despegues por avion: {max_plane_takeoffs} , {min_plane_takeoffs if min_plane_takeoffs<sys.maxsize else 0} , {mean_plane_takeoffs}
+        Máximo, mínimo y valor medio de aterrizajes por aeropuerto: {max_airport_landings} , {min_airport_landings if min_airport_landings<sys.maxsize else 0} , {mean_airport_landings}
+        Máximo, mínimo y valor medio de aterrizajes por avion: {max_plane_landings} , {min_plane_landings if min_plane_landings<sys.maxsize else 0} , {mean_plane_landings}
+        Máximo, mínimo y valor medio de retrasos en despegues por avion: {max_waiting_takeoffs}, {min_waiting_takeoffs if min_waiting_takeoffs<sys.maxsize else 0}, {mean_waiting_takeoffs}
+        Máximo, mínimo y valor medio de retrasos en aterrizajes por avion: {max_waiting_landings}, {min_waiting_landings if min_waiting_landings<sys.maxsize else 0}, {mean_waiting_landings}
+        """
+        return variables

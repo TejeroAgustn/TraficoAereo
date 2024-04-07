@@ -1,8 +1,11 @@
-from mesa.visualization.modules import CanvasGrid, ChartModule
+from mesa.visualization.modules import CanvasGrid, TextElement
 from mesa.visualization.ModularVisualization import ModularServer
 from Model.AirTrafficModel import AirTrafficModel
 from Agents.Airport import Airport
 from Agents.Plane import Plane
+
+
+
 
 class AirTrafficServer:
     def __init__(self, model_cls, tam_cuadricula, tiempo_simulacion, num_airports, num_planes, max_num_aisrstrips, 
@@ -42,11 +45,10 @@ class AirTrafficServer:
     def launch(self):
         grid = CanvasGrid(self.agent_portrayal, self.width, self.height, self.width*10, self.height*10)
 
-        chart = ChartModule([{"Label": "Paso de simulación", "Color": "Black"}],
-                            data_collector_name='datacollector')
+        total_stuck = StuckTotal()
 
         server = ModularServer(self.model_cls,
-                    [grid, chart],
+                    [grid, total_stuck],
                     "Air Traffic Model",
                     {"width": self.width,
                         "height": self.height,
@@ -61,3 +63,12 @@ class AirTrafficServer:
 
         server.port = 6969
         server.launch()
+
+
+class StuckTotal(TextElement):
+    def __init__(self):
+        pass
+
+    def render(self, model):
+        return model.parametros_salida()
+    

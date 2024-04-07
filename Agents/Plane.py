@@ -11,6 +11,8 @@ class Plane(Agent):
             # intercambiar origen y destino  y pedir permiso para salir
 
         self.current_waiting = 0
+        self.waitings_landings = []
+        self.waitings_takeofss = []
         self.current_airstrip = 0
 
         self.total_landings = 0
@@ -50,9 +52,11 @@ class Plane(Agent):
 
         if self.pos == self.destination.pos:
             self.wait_time_airport = self.wait_time_landing 
+            self.waitings_landings.append(self.current_waiting)
             self.vueling = False
         else:
             self.wait_time_airport = self.wait_time_takeoff
+            self.waitings_takeofss.append(self.current_waiting)
             self.vueling = True
             
         return self.wait_time_airport
@@ -80,8 +84,6 @@ class Plane(Agent):
                 self.origin.request_airstrip(self)
                 self.waiting = True
                 self.current_waiting = 0
-
-
 
         elif self.pos == self.origin.pos:
             # He quitado esto porque cuando aterrizamos e intercambiamos las variable va a ser cuando pidamos ya para despegar y nos quedemos esperando
