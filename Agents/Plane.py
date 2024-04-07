@@ -5,10 +5,7 @@ class Plane(Agent):
         super().__init__(unique_id, model)
         self.origin = origin
         self.destination = destination
-        self.pos = destination.pos 
-            # La localización inicial está puesta como destino cuando en realidad desde el modelo está puesto el origen como destino
-            # es una ñapa para que en el caso inicial piense que está en el caso en el que acaba de aterrizar y lo que haga sea 
-            # intercambiar origen y destino  y pedir permiso para salir
+        self.pos = destination.pos
 
         self.current_waiting = 0
         self.waitings_landings = []

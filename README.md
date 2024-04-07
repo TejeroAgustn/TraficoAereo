@@ -43,4 +43,14 @@ Para comenzar, asegúrate de tener GIT, Visual Studio Code y Python instalados e
      pip install -r requirements.txt
      ```
 
-Con estas configuraciones, debería estar todo listo para ejecutar el proyecto correctamente. Si te da algún error ya sabes, a chatGPT.
+1.4 Ejecución:
+
+   - En el archivo app.py se encuentran las entradas de la simulación:
+     ```
+     server = AirTrafficServer(AirTrafficModel, tam_cuadricula=70, tiempo_simulacion=200, num_airports=10, 
+                              num_planes=30, max_num_aisrstrips=1, max_plane_speed=1, tiempo_entre_despegues_aterrizajes=5, max_time_waiting=5)
+     ```
+   - El caso 1 y 2 vienen predefinidos, se descomenta aquel que se quiera ejecutar y se ejecuta la app.
+   - Los parámetros pueden modificarse como se crea conveniente
+   - Los cuadrados azules representan los aeropuertos y los círculos rojos los aviones
+   - Si un avión se encuentra en una pista para aterrizar o despegar o está esperando al permiso del aeropuerto para usar una pista permanecerá fijo sobre dicho aeropuerto

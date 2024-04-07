@@ -5,7 +5,6 @@ import random
 from Agents.Airport import Airport
 from Agents.Plane import Plane
 import sys
-from mesa.datacollection import DataCollector
 
 class AirTrafficModel(Model):
     def __init__(self, width, height, num_airports, num_planes, max_num_aisrstrips, max_plane_speed, 
@@ -22,12 +21,6 @@ class AirTrafficModel(Model):
         self.tiempo_simulacion = tiempo_simulacion
         self.tiempo_entre_despegues_aterrizajes = tiempo_entre_despegues_aterrizajes
         self.max_time_waiting = max_time_waiting
-
-        self.datacollector = DataCollector(
-            # Define las variables que deseas recopilar
-            agent_reporters={"Num_Airports": lambda m: m.num_airports,
-                             "Num_Planes": lambda m: m.num_planes}
-        )
 
         self.schedule = RandomActivation(self)
         self._steps = 1  # Inicializamos el contador de pasos
